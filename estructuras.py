@@ -42,3 +42,27 @@ def crear_cuenta(cuentas, titular, dni, pin_hash, saldo_inicial=0):
     }
     return cuenta
 
+def buscar_cuenta_por_dni(cuentas, dni):
+    """Busca una cuenta en la lista de cuentas por su DNI.
+    parámetros:
+        cuentas (list): lista de cuentas existentes.
+        dni (str): documento del titular a buscar.
+    Retorna:
+        dict: cuenta encontrada o None si no existe."""
+    for cuenta in cuentas:           
+        if cuenta["dni"] == dni:   
+            return cuenta          
+    return None   
+
+
+""" bloque de prueba para ejecutar el código y ver si funciona correctamente
+if __name__ == "__main__":
+    cuentas = []
+    cuenta_1 = crear_cuenta(cuentas, "Ana Pérez", "30123456", "hash_de_prueba")
+    cuentas.append(cuenta_1)
+    cuenta_2 = crear_cuenta(cuentas, "Luis Gómez", "28999111", "hash_de_prueba")
+    
+cuentas = [cuenta_1, cuenta_2]
+print(buscar_cuenta_por_dni(cuentas, "28999111"))  # debe mostrar a Luis Gómez
+print(buscar_cuenta_por_dni(cuentas, "00000000"))  # debe mostrar None
+"""
