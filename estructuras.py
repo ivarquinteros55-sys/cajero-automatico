@@ -1,5 +1,5 @@
 # estructuras.py - Constructores de las entidades del cajero (cuentas y movimientos).
-
+from utils import obtener_fecha_hora_actual
 LIMITE_DIARIO_POR_DEFECTO = 5000000
 
 
@@ -54,6 +54,30 @@ def buscar_cuenta_por_dni(cuentas, dni):
             return cuenta          
     return None   
 
+def crear_movimiento(movimientos, id_cuenta, tipo, monto, saldo_resultante):
+    """Crea un diccionario que representa un movimiento bancario.
+    
+    Parámetros:
+        movimientos (list): lista de movimientos existentes (para calcular el ID).
+        id_cuenta (int): ID de la cuenta involucrada.
+        tipo (str): tipo de movimiento ("deposito", "retiro" o "transferencia").
+        monto (float): cantidad de dinero involucrada.
+        saldo_resultante (float): saldo de la cuenta después del movimiento.
+
+    Retorna:
+        dict: movimiento con id_movimiento, id_cuenta, tipo, monto, fecha y saldo_resultante.
+    """
+    id_nuevo = generar_siguiente_id(movimientos, "id_movimiento")
+    movimiento = {
+        "id_movimiento": id_nuevo,
+        "id_cuenta": id_cuenta,
+        "tipo": tipo,
+        "monto": monto,
+        "fecha": obtener_fecha_hora_actual(),
+        "saldo_resultante": saldo_resultante,
+    }
+    return movimiento
+
 
 """ bloque de prueba para ejecutar el código y ver si funciona correctamente
 if __name__ == "__main__":
@@ -62,7 +86,13 @@ if __name__ == "__main__":
     cuentas.append(cuenta_1)
     cuenta_2 = crear_cuenta(cuentas, "Luis Gómez", "28999111", "hash_de_prueba")
     
-cuentas = [cuenta_1, cuenta_2]
-print(buscar_cuenta_por_dni(cuentas, "28999111"))  # debe mostrar a Luis Gómez
-print(buscar_cuenta_por_dni(cuentas, "00000000"))  # debe mostrar None
+    cuentas = [cuenta_1, cuenta_2]
+    print(buscar_cuenta_por_dni(cuentas, "28999111"))  # debe mostrar a Luis Gómez
+    print(buscar_cuenta_por_dni(cuentas, "00000000"))  # debe mostrar None
+    movimientos = []
+    mov_1 = crear_movimiento(movimientos, 1, "retiro", 2000, 8000)
+    movimientos.append(mov_1)
+    mov_2 = crear_movimiento(movimientos, 1, "deposito", 500, 8500)
+    print(mov_1)
+    print(mov_2)
 """
