@@ -81,14 +81,17 @@ def crear_movimiento(movimientos, id_cuenta, tipo, monto, saldo_resultante):
 
 """ bloque de prueba para ejecutar el código y ver si funciona correctamente
 if __name__ == "__main__":
+    # Crear cuentas de prueba#
     cuentas = []
     cuenta_1 = crear_cuenta(cuentas, "Ana Pérez", "30123456", "hash_de_prueba")
     cuentas.append(cuenta_1)
     cuenta_2 = crear_cuenta(cuentas, "Luis Gómez", "28999111", "hash_de_prueba")
     
+    #Busca la cuenta por dni y muestra el resultado#
     cuentas = [cuenta_1, cuenta_2]
     print(buscar_cuenta_por_dni(cuentas, "28999111"))  # debe mostrar a Luis Gómez
     print(buscar_cuenta_por_dni(cuentas, "00000000"))  # debe mostrar None
+    #crea movimientos y prueba que funcione correctamente la funcion de obtener fecha#
     movimientos = []
     mov_1 = crear_movimiento(movimientos, 1, "retiro", 2000, 8000)
     movimientos.append(mov_1)
