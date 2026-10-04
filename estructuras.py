@@ -1,6 +1,6 @@
 # estructuras.py - Constructores de las entidades del cajero (cuentas y movimientos).
 from utils import obtener_fecha_hora_actual
-LIMITE_DIARIO_POR_DEFECTO = 5000000
+LIMITE_DIARIO_POR_DEFECTO = 50000
 
 
 def generar_siguiente_id(lista, clave_id):
@@ -89,8 +89,8 @@ if __name__ == "__main__":
     
     #Busca la cuenta por dni y muestra el resultado#
     cuentas = [cuenta_1, cuenta_2]
-    print(buscar_cuenta_por_dni(cuentas, "28999111"))  # debe mostrar a Luis Gómez
-    print(buscar_cuenta_por_dni(cuentas, "00000000"))  # debe mostrar None
+    print(buscar_cuenta_por_dni(cuentas, "28999111"))  
+    print(buscar_cuenta_por_dni(cuentas, "00000000"))  
     #crea movimientos y prueba que funcione correctamente la funcion de obtener fecha#
     movimientos = []
     mov_1 = crear_movimiento(movimientos, 1, "retiro", 2000, 8000)
