@@ -4,6 +4,9 @@ from estructuras import crear_cuenta, buscar_cuenta_por_dni
 from persistencia import (cargar_datos_json, guardar_datos_json, registrar_log,
                           RUTA_ARCHIVO_JSON, RUTA_ARCHIVO_LOG)
 from utils import hashear_pin, validar_pin, validar_dni, validar_monto
+from operaciones import consultar_saldo, retirar
+
+MAX_INTENTOS_LOGIN = 3
 
 DATOS_INICIALES = {"cuentas": [], "movimientos": []}
 
@@ -51,7 +54,9 @@ def main():
         mostrar_menu_principal()
         opcion = input("Elegí una opción: ").strip()
         if opcion == "1":
-            print("Próximamente.")          
+            cuenta = iniciar_sesion(datos)
+            if cuenta is not None:
+                menu_cuenta(cuenta, datos)          
         elif opcion == "2":
             registrar_cuenta_nueva(datos)
         elif opcion == "0":
@@ -60,6 +65,64 @@ def main():
         else:
             print("Opción inválida.")
 
+
+
+
+def iniciar_sesion(datos):
+    """Docstring completo. Retorna la cuenta si el login es correcto, o None."""
+    dni = input("DNI: ").strip()
+    for intento in range(MAX_INTENTOS_LOGIN):
+        pin = input("PIN: ").strip()
+        cuenta = buscar_cuenta_por_dni(datos["cuentas"], dni)
+        if cuenta is not None and cuenta["pin_hash"] == hashear_pin(pin):
+            registrar_log(RUTA_ARCHIVO_LOG, f"Login correcto: cuenta {cuenta['id_cuenta']}")
+            return cuenta
+        registrar_log(RUTA_ARCHIVO_LOG, f"Login fallido para DNI {dni}")
+        print("DNI o PIN incorrectos.")
+    print("Demasiados intentos fallidos.")
+    return None
+
+
+def mostrar_menu_cuenta(cuenta):
+    """Docstring completo."""
+    print(f"\n--- Bienvenido/a, {cuenta['titular']} ---")
+    print("1. Consultar saldo")
+    print("2. Retirar dinero")
+    print("0. Cerrar sesión")
+
+
+def opcion_consultar_saldo(cuenta):
+    """Docstring completo."""
+    print(f"Saldo actual: {consultar_saldo(cuenta)}")
+
+
+def opcion_retirar(cuenta, datos):
+    """Docstring completo. Pide el monto, retira y guarda si salió bien."""
+    monto = validar_monto(input("Monto a retirar: ").strip())
+    if monto is None:
+        print("Monto inválido.")
+        return
+    exito, mensaje = retirar(cuenta, datos["movimientos"], monto)
+    print(mensaje)
+    if exito:
+        guardar_datos_json(RUTA_ARCHIVO_JSON, datos)
+        registrar_log(RUTA_ARCHIVO_LOG, f"Retiro de {monto} en cuenta {cuenta['id_cuenta']}")
+
+
+def menu_cuenta(cuenta, datos):
+    """Docstring completo. Bucle del submenú de la cuenta."""
+    while True:
+        mostrar_menu_cuenta(cuenta)
+        opcion = input("Elegí una opción: ").strip()
+        if opcion == "1":
+            opcion_consultar_saldo(cuenta)
+        elif opcion == "2":
+            opcion_retirar(cuenta, datos)
+        elif opcion == "0":
+            print("Sesión cerrada.")
+            break
+        else:
+            print("Opción inválida.")
 
 if __name__ == "__main__":
     main()
