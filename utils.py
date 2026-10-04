@@ -4,6 +4,10 @@ import math
 from datetime import datetime
 
 
+def validar_dni(dni):
+    """Verifica que el DNI tenga 7 u 8 dígitos. Retorna True si es válido."""
+    return dni.isdigit() and 7 <= len(dni) <= 8
+
 def obtener_fecha_hora_actual():
     """Devuelve la fecha y hora actual en formato de cadena."""
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
