@@ -20,7 +20,9 @@ def mostrar_menu_principal():
 
 
 def registrar_cuenta_nueva(datos):
-    """Docstring completo. Pide los datos, valida y crea la cuenta."""
+    """Registra una nueva cuenta. Pide los datos, valida y crea la cuenta.
+    parametros: datos (dict): Diccionario con las cuentas y movimientos.
+    Retorna: None"""
     dni = input("DNI (7 u 8 dígitos): ").strip()
     if not validar_dni(dni):
         print("DNI inválido.")
@@ -48,7 +50,9 @@ def registrar_cuenta_nueva(datos):
 
 
 def main():
-    """Docstring completo. Bucle del menú principal."""
+    """Funcion del menu. Bucle del menú principal
+    parametros: datos (dict): Diccionario con las cuentas y movimientos
+    retorna: None"""
     datos = cargar_datos_json(RUTA_ARCHIVO_JSON, DATOS_INICIALES)
     while True:
         mostrar_menu_principal()
@@ -69,7 +73,9 @@ def main():
 
 
 def iniciar_sesion(datos):
-    """Docstring completo. Retorna la cuenta si el login es correcto, o None."""
+    """Inicia sesión en el sistema. Retorna la cuenta si el login es correcto, o None.
+    parametros: datos (dict): Diccionario con las cuentas y movimientos
+    retorna: cuenta (dict) o None"""
     dni = input("DNI: ").strip()
     for intento in range(MAX_INTENTOS_LOGIN):
         pin = input("PIN: ").strip()
@@ -84,7 +90,7 @@ def iniciar_sesion(datos):
 
 
 def mostrar_menu_cuenta(cuenta):
-    """Docstring completo."""
+    """Muestra el menú de la cuenta."""
     print(f"\n--- Bienvenido/a, {cuenta['titular']} ---")
     print("1. Consultar saldo")
     print("2. Retirar dinero")
@@ -92,12 +98,15 @@ def mostrar_menu_cuenta(cuenta):
 
 
 def opcion_consultar_saldo(cuenta):
-    """Docstring completo."""
+    """Muestra el saldo de la cuenta."""
     print(f"Saldo actual: {consultar_saldo(cuenta)}")
 
 
 def opcion_retirar(cuenta, datos):
-    """Docstring completo. Pide el monto, retira y guarda si salió bien."""
+    """Docstring completo. Pide el monto, retira y guarda si salió bien
+    parametros: cuenta (dict): La cuenta del usuario
+    datos (dict): Diccionario con las cuentas y movimientos
+    retorna: None"""
     monto = validar_monto(input("Monto a retirar: ").strip())
     if monto is None:
         print("Monto inválido.")
@@ -110,7 +119,10 @@ def opcion_retirar(cuenta, datos):
 
 
 def menu_cuenta(cuenta, datos):
-    """Docstring completo. Bucle del submenú de la cuenta."""
+    """Menu de sesión. Bucle del submenú de la cuenta.
+    parametros: cuenta (dict): La cuenta del usuario
+    datos (dict): Diccionario con las cuentas y movimientos
+    retorna: None"""
     while True:
         mostrar_menu_cuenta(cuenta)
         opcion = input("Elegí una opción: ").strip()
