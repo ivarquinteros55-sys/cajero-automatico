@@ -1,3 +1,4 @@
 __pycache__/
 datos/*.json
 datos/*.txt
+datos/*.csv

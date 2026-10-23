@@ -1,12 +1,14 @@
 # persistencia.py - ...
 
 import json
+import csv
 
 from utils import obtener_fecha_hora_actual
 
 RUTA_ARCHIVO_JSON = "datos/cajero.json"
 RUTA_ARCHIVO_LOG = "datos/log_operaciones.txt"
-
+RUTA_ARCHIVO_CSV = "datos/historial_movimientos.csv"
+CAMPOS_CSV = ["id_movimiento", "id_cuenta", "tipo", "monto", "fecha", "saldo_resultante"]
 
 def cargar_datos_json(ruta, valor_por_defecto):
     """Carga los datos desde un archivo json
@@ -49,6 +51,23 @@ def registrar_log(ruta, mensaje):
     except OSError:
         print("No se pudo escribir en el log.")
 
+def exportar_movimientos_csv(ruta, movimientos):
+    """Exporta los movimientos a un archivo CSV.
+    Parametros:
+        ruta (str): ruta del archivo CSV.
+        movimientos (list): lista de diccionarios con los movimientos.
+    Retorna:
+        bool: True si se exportó, False si hubo un error."""
+    try:
+        with open(ruta, "w", newline="", encoding="utf-8") as archivo:
+            escritor = csv.DictWriter(archivo, fieldnames=CAMPOS_CSV)
+            escritor.writeheader()
+            escritor.writerows(movimientos)
+        return True
+    except OSError:
+        print("No se pudo exportar el archivo CSV.")
+        return False
+
 
 """" Bloque de prueba para ejecutar el codigo y ver si funciona correctamente
 if __name__ == "__main__":
@@ -64,3 +83,10 @@ if __name__ == "__main__":
 
     registrar_log(RUTA_ARCHIVO_LOG, "Prueba de registro")
     """
+
+"""if __name__ == "__main__":
+    movimientos = [
+        {"id_movimiento": 1, "id_cuenta": 1, "tipo": "retiro", "monto": 2000, "fecha": "2026-10-20 10:00:00", "saldo_resultante": 8000},
+        {"id_movimiento": 2, "id_cuenta": 1, "tipo": "deposito", "monto": 500, "fecha": "2026-10-21 09:00:00", "saldo_resultante": 8500},
+    ]
+    print(exportar_movimientos_csv(RUTA_ARCHIVO_CSV, movimientos))"""
