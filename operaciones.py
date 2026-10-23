@@ -58,6 +58,24 @@ def depositar(cuenta, movimientos, monto):
     return True, f"Depósito realizado. Nuevo saldo: {cuenta['saldo']:.2f}"
 
 
+def transferir(cuenta_origen, cuenta_destino, movimientos, monto):
+    """Operacion que nos deja transferir dinero entre cuentas.
+     Parametros:Cuenta_origen,Cuenta_destino,Movimientos,Monto
+       Retorna (True, mensaje de transferencia exitosa + nuevo saldo) o (False, mensaje de error)."""
+    if cuenta_origen["id_cuenta"] == cuenta_destino["id_cuenta"]:
+        return False, "No podés transferir a tu propia cuenta."
+    if monto > cuenta_origen["saldo"]:
+        return False, "Saldo insuficiente."
+    cuenta_origen["saldo"] -= monto
+    cuenta_destino["saldo"] += monto
+    enviado = crear_movimiento(movimientos, cuenta_origen["id_cuenta"],
+                               "transferencia_enviada", monto, cuenta_origen["saldo"])
+    movimientos.append(enviado)
+    recibido = crear_movimiento(movimientos, cuenta_destino["id_cuenta"], "transferencia_recibida", monto, cuenta_destino["saldo"])
+    movimientos.append(recibido)
+    return True, f"Transferencia realizada. Nuevo saldo: {cuenta_origen['saldo']:.2f}"
+
+
 """if __name__ == "__main__":
     from estructuras import crear_cuenta
 
@@ -76,7 +94,7 @@ def depositar(cuenta, movimientos, monto):
     cuenta_chica["limite_diario"] = 10000
     print(retirar(cuenta_chica, [], 10001))"""
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     from estructuras import crear_cuenta
 
     cuenta = crear_cuenta([], "Ana", "30123456", "x", 1000)
@@ -84,4 +102,16 @@ if __name__ == "__main__":
     print(depositar(cuenta, movimientos, 500))
     print(cuenta["saldo"])
     print(retirar(cuenta, movimientos, 200))
+    print(movimientos)"""
+
+if __name__ == "__main__":
+    from estructuras import crear_cuenta
+
+    ana = crear_cuenta([], "Ana", "30123456", "x", 1000)
+    luis = crear_cuenta([ana], "Luis", "28999111", "x", 500)
+    movimientos = []
+    print(transferir(ana, luis, movimientos, 300))
+    print(transferir(ana, luis, movimientos, 5000))
+    print(transferir(ana, ana, movimientos, 10))
+    print(ana["saldo"], luis["saldo"])
     print(movimientos)
