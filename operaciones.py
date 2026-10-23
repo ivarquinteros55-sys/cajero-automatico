@@ -104,7 +104,7 @@ def transferir(cuenta_origen, cuenta_destino, movimientos, monto):
     print(retirar(cuenta, movimientos, 200))
     print(movimientos)"""
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     from estructuras import crear_cuenta
 
     ana = crear_cuenta([], "Ana", "30123456", "x", 1000)
@@ -114,4 +114,4 @@ if __name__ == "__main__":
     print(transferir(ana, luis, movimientos, 5000))
     print(transferir(ana, ana, movimientos, 10))
     print(ana["saldo"], luis["saldo"])
-    print(movimientos)
+    print(movimientos)"""
