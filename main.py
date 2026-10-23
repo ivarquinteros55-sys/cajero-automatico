@@ -4,7 +4,7 @@ from estructuras import crear_cuenta, buscar_cuenta_por_dni
 from persistencia import (cargar_datos_json, guardar_datos_json, registrar_log,
                           RUTA_ARCHIVO_JSON, RUTA_ARCHIVO_LOG)
 from utils import hashear_pin, validar_pin, validar_dni, validar_monto
-from operaciones import consultar_saldo, retirar
+from operaciones import consultar_saldo, retirar, depositar, transferir
 
 MAX_INTENTOS_LOGIN = 3
 
@@ -94,6 +94,8 @@ def mostrar_menu_cuenta(cuenta):
     print(f"\n--- Bienvenido/a, {cuenta['titular']} ---")
     print("1. Consultar saldo")
     print("2. Retirar dinero")
+    print("3. Depositar dinero")
+    print("4. Transferir dinero")
     print("0. Cerrar sesión")
 
 
@@ -103,19 +105,53 @@ def opcion_consultar_saldo(cuenta):
 
 
 def opcion_retirar(cuenta, datos):
-    """Docstring completo. Pide el monto, retira y guarda si salió bien
-    parametros: cuenta (dict): La cuenta del usuario
-    datos (dict): Diccionario con las cuentas y movimientos
-    retorna: None"""
-    monto = validar_monto(input("Monto a retirar: ").strip())
+    """Docstring completo."""
+    monto = pedir_monto("Monto a retirar: ")
     if monto is None:
-        print("Monto inválido.")
         return
     exito, mensaje = retirar(cuenta, datos["movimientos"], monto)
     print(mensaje)
     if exito:
-        guardar_datos_json(RUTA_ARCHIVO_JSON, datos)
-        registrar_log(RUTA_ARCHIVO_LOG, f"Retiro de {monto} en cuenta {cuenta['id_cuenta']}")
+        guardar_y_registrar(datos, f"Retiro de {monto} en cuenta {cuenta['id_cuenta']}")
+
+def pedir_monto(mensaje):
+    """Docstring completo. Retorna el monto validado o None si es inválido."""
+    monto = validar_monto(input(mensaje).strip())
+    if monto is None:
+        print("Monto inválido.")
+    return monto
+
+
+def guardar_y_registrar(datos, mensaje_log):
+    """Docstring completo. Guarda el JSON y registra la operación en el log."""
+    guardar_datos_json(RUTA_ARCHIVO_JSON, datos)
+    registrar_log(RUTA_ARCHIVO_LOG, mensaje_log)
+
+def opcion_depositar(cuenta, datos):
+    """Docstring completo."""
+    monto = pedir_monto("Monto a depositar: ")
+    if monto is None:
+        return
+    exito, mensaje = depositar(cuenta, datos["movimientos"], monto)
+    print(mensaje)
+    if exito:
+        guardar_y_registrar(datos, f"Depósito de {monto} en cuenta {cuenta['id_cuenta']}")
+
+
+def opcion_transferir(cuenta, datos):
+    """Docstring completo."""
+    dni_destino = input("DNI de la cuenta destino: ").strip()
+    cuenta_destino = buscar_cuenta_por_dni(datos["cuentas"], dni_destino)
+    if cuenta_destino is None:
+        print("La cuenta destino no existe.")
+        return
+    monto = pedir_monto("Monto a transferir: ")
+    if monto is None:
+        return
+    exito, mensaje = transferir(cuenta, cuenta_destino, datos["movimientos"], monto)
+    print(mensaje)
+    if exito:
+        guardar_y_registrar(datos, f"Transferencia de {monto}: cuenta {cuenta['id_cuenta']} a cuenta {cuenta_destino['id_cuenta']}")
 
 
 def menu_cuenta(cuenta, datos):
@@ -130,11 +166,18 @@ def menu_cuenta(cuenta, datos):
             opcion_consultar_saldo(cuenta)
         elif opcion == "2":
             opcion_retirar(cuenta, datos)
+        elif opcion == "3":
+            opcion_depositar(cuenta, datos)
+        elif opcion == "4":
+            opcion_transferir(cuenta, datos)    
         elif opcion == "0":
             print("Sesión cerrada.")
             break
         else:
             print("Opción inválida.")
+       
 
 if __name__ == "__main__":
     main()
+
+
