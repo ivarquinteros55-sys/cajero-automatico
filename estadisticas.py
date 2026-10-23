@@ -32,7 +32,7 @@ def obtener_monto_minimo_y_maximo(movimientos):
     return minimo, maximo
 
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     movimientos = [
         {"id_movimiento": 1, "id_cuenta": 1, "tipo": "retiro", "monto": 2000, "fecha": "2026-10-20 10:00:00", "saldo_resultante": 8000},
         {"id_movimiento": 2, "id_cuenta": 2, "tipo": "deposito", "monto": 500, "fecha": "2026-10-21 09:00:00", "saldo_resultante": 1500},
@@ -42,4 +42,4 @@ if __name__ == "__main__":
     print(contar_movimientos_por_tipo(movimientos))
     print(calcular_promedio_monto(movimientos))
     print(obtener_monto_minimo_y_maximo(movimientos))
-    print(calcular_promedio_monto([]), obtener_monto_minimo_y_maximo([]))
+    print(calcular_promedio_monto([]), obtener_monto_minimo_y_maximo([]))"""

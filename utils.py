@@ -48,6 +48,11 @@ def validar_monto(texto):
         return monto
     return None
 
+def formatear_movimiento(movimiento):
+    """Docstring completo. Retorna una línea de texto lista para mostrar."""
+    return (f"{movimiento['fecha']} | {movimiento['tipo']:<22} | "
+            f"{movimiento['monto']:>12.2f} | saldo: {movimiento['saldo_resultante']:.2f}")
+
 """
 if __name__ == "__main__":
     print(obtener_fecha_hora_actual())

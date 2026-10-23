@@ -1,7 +1,7 @@
 # estructuras.py - Constructores de las entidades del cajero (cuentas y movimientos).
 from utils import obtener_fecha_hora_actual
 LIMITE_DIARIO_POR_DEFECTO = 50000
-
+TIPOS_MOVIMIENTO = ["retiro", "deposito", "transferencia_enviada", "transferencia_recibida"]
 
 def generar_siguiente_id(lista, clave_id):
     """Devuelve el próximo ID para una lista de diccionarios.
