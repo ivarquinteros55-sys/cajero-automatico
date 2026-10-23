@@ -48,6 +48,16 @@ def retirar(cuenta, movimientos, monto):
     return True, f"Retiro realizado. Nuevo saldo: {cuenta['saldo']}"
 
 
+def depositar(cuenta, movimientos, monto):
+    """Operacion que nos deja depositar dinero en la cuenta.
+     Parametros:Cuenta,Movimientos,Monto
+       Retorna (True, mensaje de deposito exitoso + nuevo saldo)."""
+    cuenta["saldo"] += monto
+    movimiento = crear_movimiento(movimientos, cuenta["id_cuenta"], "deposito", monto, cuenta["saldo"])
+    movimientos.append(movimiento)
+    return True, f"Depósito realizado. Nuevo saldo: {cuenta['saldo']:.2f}"
+
+
 """if __name__ == "__main__":
     from estructuras import crear_cuenta
 
@@ -65,3 +75,13 @@ def retirar(cuenta, movimientos, monto):
     cuenta_chica = crear_cuenta([], "Luis", "28999111", "x", 100000)
     cuenta_chica["limite_diario"] = 10000
     print(retirar(cuenta_chica, [], 10001))"""
+
+if __name__ == "__main__":
+    from estructuras import crear_cuenta
+
+    cuenta = crear_cuenta([], "Ana", "30123456", "x", 1000)
+    movimientos = []
+    print(depositar(cuenta, movimientos, 500))
+    print(cuenta["saldo"])
+    print(retirar(cuenta, movimientos, 200))
+    print(movimientos)
