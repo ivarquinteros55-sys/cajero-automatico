@@ -90,3 +90,70 @@
 - **Resultado:** recomendación de usar un repositorio en GitHub, reglas de `.gitignore` y `.gitkeep` para no subir los datos de prueba, y diagnóstico del error de `remote origin` apuntando a un repositorio eliminado.
 - **Modificaciones propias:** configuré el `.gitignore`, hice los commits de docstrings por módulo, corregí la dirección del remoto y subí el proyecto con `git push`.
 - **Estado:** resuelto y verificado.
+
+---
+
+# Hito 2
+
+## 10. Planificación del Hito 2
+
+- **Fecha:** 2026-10-22
+- **Herramienta:** Claude
+- **Prompt:** Avanzamos con el Hito 2, a partir del modelo del Hito 2 y la consigna del proyecto.
+- **Resultado:** comparación entre lo ya construido y los requisitos del hito (funcionalidades, filtro, ordenamiento, estadísticas, CSV, tests, README, informe y video), plan de trabajo por etapas con calendario hasta la entrega.
+- **Modificaciones propias:** definí el orden de trabajo y el reparto del tiempo hasta la entrega.
+- **Estado:** aceptado.
+
+## 11. Depósito y transferencia en `operaciones.py`
+
+- **Fecha:** 2026-10-23
+- **Herramienta:** Claude
+- **Prompt:** Avanzamos con `depositar()` y `transferir()`, y se consultó cómo probarlas.
+- **Resultado:** Ejemplos de funciones y sugerencias de diseño: la transferencia valida todo antes de modificar los saldos, no aplica el límite diario (que es solo para retiros) y registra dos movimientos, `transferencia_enviada` y `transferencia_recibida`. Advertencia sobre agregar el primer movimiento a la lista antes de crear el segundo, para no repetir IDs.
+- **Modificaciones propias:** completamos las funciones y se probaron los casos: depósito, transferencia correcta, saldo insuficiente y transferencia a la propia cuenta. Verifiqué los saldos y los movimientos generados.
+- **Estado:** modificado y verificado.
+
+## 12. Filtro y ordenamiento propio en `consultas.py`
+
+- **Fecha:** 2026-10-23
+- **Herramienta:** Claude
+- **Prompt:** Avanzar con el historial de movimientos, con filtro y ordenamiento.
+- **Resultado:** propuesta de un módulo nuevo con tres funciones (movimientos de una cuenta, filtro por tipo y ordenamiento por inserción), el esqueleto del algoritmo, y explicaciones sobre trabajar con una copia de la lista y sobre ordenar fechas como texto.
+- **Modificaciones propias:** completamos las funciones, probamos con una lista de cuatro movimientos y comprobamos que el orden y los filtros eran los esperados y que la lista original no se alteraba.
+- **Estado:** modificado y verificado.
+
+## 13. Estadísticas y exportación a CSV
+
+- **Fecha:** 2026-10-23
+- **Herramienta:** Claude
+- **Prompt:** continuemos con las estadísticas y luego con la exportación a CSV.
+- **Resultado:** esqueletos de `contar_movimientos_por_tipo()`, `calcular_promedio_monto()` y `obtener_monto_minimo_y_maximo()` (que devuelve una tupla), contemplando la lista vacía, y de `exportar_movimientos_csv()` con `csv.DictWriter`, junto con la regla de `.gitignore` para no subir el CSV de prueba.
+- **Modificaciones propias:** se completaron las funciones, escribimos los docstrings, probamos con datos de ejemplo y comprobamos el contenido del archivo CSV generado.
+- **Estado:** modificado y verificado.
+
+## 14. Integración al menú y depuración de las opciones 6 y 7
+
+- **Fecha:** 2026-10-23
+- **Herramienta:** Claude
+- **Prompt:** Pedimos sugerencias conectar las nuevas funciones en `main.py`, y después reporté que las opciones 6 y 7 no funcionaban (el número se borraba y volvía al menú), adjuntando mi `main.py` y `estadisticas.py`.
+- **Resultado:** esqueletos de las nuevas opciones del menú, los ayudantes `pedir_monto()` y `guardar_y_registrar()` para evitar código duplicado, y el submenú del historial. Para el problema, revisión de imports y `elif`, y pruebas de cada módulo por separado para aislar la falla.
+- **Modificaciones propias:** completé e integré las opciones, juntamos las pruebas aisladas y volví a ejecutar. Se resolvio el problema de las opciones 6 y 7, rearmando los imports y se encontro que la falla estaba en un error de sintaxis(estaba mas escrito los imports). Verifiqué las siete opciones del menú.
+- **Estado:** resuelto y verificado.
+
+## 15. Pruebas unitarias en `test_cajero.py`
+
+- **Fecha:** 2026-10-23
+- **Herramienta:** Claude
+- **Prompt:** Pedí armar las pruebas unitarias exigidas por la consigna y reporté el error al ejecutarlas.
+- **Resultado:** sugerencia de las cinco pruebas con `unittest` (2 de dominio, 2 de persistencia y 1 de validación), uso de una carpeta temporal para no tocar los datos reales, y diagnóstico del `ModuleNotFoundError` (el archivo no estaba en la carpeta desde donde se ejecutaba).
+- **Modificaciones propias:** Armamos la función, moví el archivo a la raíz del proyecto y ejecuté las pruebas: las cinco pasan.
+- **Estado:** modificado y verificado.
+
+## 16. Documentación: README y guion de defensa
+
+- **Fecha:** 2026-10-23
+- **Herramienta:** Claude
+- **Prompt:** Pedí sugerencias para el README del proyecto
+- **Resultado:** README con instrucciones de ejecución, estructura, persistencia, pruebas y limitaciones.
+- **Modificaciones propias:** Ajuste de valores respecto al proyecto,asi como tambien las reglas de negocio del trabajo.
+- **Estado:** pmodificado y verificado.
