@@ -53,11 +53,3 @@ def formatear_movimiento(movimiento):
     return (f"{movimiento['fecha']} | {movimiento['tipo']:<22} | "
             f"{movimiento['monto']:>12.2f} | saldo: {movimiento['saldo_resultante']:.2f}")
 
-"""
-if __name__ == "__main__":
-    print(obtener_fecha_hora_actual())
-    print(hashear_pin("1234"))
-    print(validar_pin("1234"), validar_pin("123"), validar_pin("12a4"))
-    for texto in ["1500.50", "0", "-5", "abc", "", "inf"]:
-        print(repr(texto), "->", validar_monto(texto))
-"""
