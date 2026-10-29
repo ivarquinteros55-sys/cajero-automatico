@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 from estructuras import crear_cuenta
-from operaciones import retirar
+from operaciones import retirar,esta_bloqueada, bloquear_cuenta
 from persistencia import guardar_datos_json, cargar_datos_json
 from utils import validar_pin
 
@@ -48,6 +48,13 @@ class TestCajero(unittest.TestCase):
         self.assertTrue(validar_pin("1234"))
         self.assertFalse(validar_pin("123"))   
         self.assertFalse(validar_pin("123a"))   
+
+   ## --- Bloqueo de cuenta ---
+    def test_bloquear_cuenta(self):
+        cuenta = crear_cuenta([], "Ana", "30123456", "x", 1000)
+        self.assertFalse(esta_bloqueada(cuenta))
+        bloquear_cuenta(cuenta)
+        self.assertTrue(esta_bloqueada(cuenta))
 
 
 if __name__ == "__main__":
