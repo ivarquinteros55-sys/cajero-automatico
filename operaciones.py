@@ -76,3 +76,11 @@ def transferir(cuenta_origen, cuenta_destino, movimientos, monto):
     return True, f"Transferencia realizada. Nuevo saldo: {cuenta_origen['saldo']:.2f}"
 
 
+def esta_bloqueada(cuenta):
+    """Funcion que se encarga del estado de bloqueo de la cuenta. Retorna True si la cuenta está bloqueada."""
+    return cuenta.get("bloqueada", False)
+
+
+def bloquear_cuenta(cuenta):
+    """Funcion que se encarga del estado de bloqueo de la cuenta. Marca la cuenta como bloqueada."""
+    cuenta["bloqueada"] = True

@@ -4,7 +4,7 @@ from estructuras import crear_cuenta, buscar_cuenta_por_dni,TIPOS_MOVIMIENTO
 from persistencia import (cargar_datos_json, guardar_datos_json, registrar_log,exportar_movimientos_csv,
                           RUTA_ARCHIVO_JSON, RUTA_ARCHIVO_LOG,RUTA_ARCHIVO_CSV)
 from utils import hashear_pin, validar_pin, validar_dni, validar_monto, formatear_movimiento
-from operaciones import consultar_saldo, retirar, depositar, transferir
+from operaciones import (consultar_saldo, retirar, depositar, transferir,esta_bloqueada, bloquear_cuenta)
 from consultas import obtener_movimientos_de_cuenta, filtrar_movimientos_por_tipo, ordenar_movimientos
 from estadisticas import (contar_movimientos_por_tipo, calcular_promedio_monto,
                           obtener_monto_minimo_y_maximo)
@@ -76,21 +76,24 @@ def main():
 
 
 
-
 def iniciar_sesion(datos):
     """Inicia sesión en el sistema. Retorna la cuenta si el login es correcto, o None.
-    parametros: datos (dict): Diccionario con las cuentas y movimientos
-    retorna: cuenta (dict) o None"""
+        parametros: datos (dict): Diccionario con las cuentas y movimientos
+        retorna: cuenta (dict) o None"""
     dni = input("DNI: ").strip()
+    cuenta = buscar_cuenta_por_dni(datos["cuentas"], dni)
+    habilitada = cuenta is not None and not esta_bloqueada(cuenta)
     for intento in range(MAX_INTENTOS_LOGIN):
         pin = input("PIN: ").strip()
-        cuenta = buscar_cuenta_por_dni(datos["cuentas"], dni)
-        if cuenta is not None and cuenta["pin_hash"] == hashear_pin(pin):
+        if habilitada and cuenta["pin_hash"] == hashear_pin(pin):
             registrar_log(RUTA_ARCHIVO_LOG, f"Login correcto: cuenta {cuenta['id_cuenta']}")
             return cuenta
         registrar_log(RUTA_ARCHIVO_LOG, f"Login fallido para DNI {dni}")
         print("DNI o PIN incorrectos.")
-    print("Demasiados intentos fallidos.")
+    if habilitada:
+        bloquear_cuenta(cuenta)
+        guardar_y_registrar(datos, f"Cuenta {cuenta['id_cuenta']} bloqueada por intentos fallidos")
+    print("Demasiados intentos fallidos. Si tu cuenta está bloqueada, contactá a la entidad.")
     return None
 
 

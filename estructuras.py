@@ -18,7 +18,7 @@ def generar_siguiente_id(lista, clave_id):
     return lista[-1][clave_id] + 1
 
 
-def crear_cuenta(cuentas, titular, dni, pin_hash, saldo_inicial=0):
+def crear_cuenta(cuentas, titular, dni, pin_hash, saldo_inicial=0, limite_diario=LIMITE_DIARIO_POR_DEFECTO, bloqueada=False):
     """Crea un diccionario que representa una cuenta bancaria.
     
      Parámetros:
@@ -31,6 +31,7 @@ def crear_cuenta(cuentas, titular, dni, pin_hash, saldo_inicial=0):
         Retorna:
         dict: cuenta con id_cuenta, titular, dni, pin_hash, saldo y limite_diario.
         """
+        
     id_nuevo = generar_siguiente_id(cuentas, "id_cuenta")
     cuenta = {
         "id_cuenta": id_nuevo,
